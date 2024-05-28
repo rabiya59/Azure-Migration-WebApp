@@ -10,7 +10,7 @@ module "rg" {
   source   = "./modules/rg"
   rg_name  = "rg-${var.project_name}-${terraform.workspace}-${var.country}"
   location = var.location
-  tags     = local.common_tags  
+  tags     = local.common_tags
 }
 
 module "vnet" {
@@ -27,29 +27,29 @@ module "vnet" {
 }
 
 module "subnet_frontend" {
-  source                = "./modules/subnet_delegation"
-  rg_name               = module.rg.rg_name
-  vnet_name             = module.vnet.vnet_name
-  delegated_subnet_name = "subnet_frontend"
-  delegated_subnet_cidr = ["10.0.1.0/27"]
-  delegation_name       = "appServiceDelegation"
-  service_delegation    = "Microsoft.Web/serverFarms"
+  source                    = "./modules/subnet_delegation"
+  rg_name                   = module.rg.rg_name
+  vnet_name                 = module.vnet.vnet_name
+  delegated_subnet_name     = "subnet_frontend"
+  delegated_subnet_cidr     = ["10.0.1.0/27"]
+  delegation_name           = "appServiceDelegation"
+  service_delegation        = "Microsoft.Web/serverFarms"
   service_delegation_action = ["Microsoft.Network/virtualNetworks/subnets/action"]
 
-  depends_on            = [module.rg, module.vnet]
+  depends_on = [module.rg, module.vnet]
 }
 
 module "subnet_backend" {
-  source                = "./modules/subnet_delegation"
-  rg_name               = module.rg.rg_name
-  vnet_name             = module.vnet.vnet_name
-  delegated_subnet_name = "subnet_backend"
-  delegated_subnet_cidr = ["10.0.2.0/28"]
-  delegation_name       = "mysqlDelegation"
-  service_delegation    = "Microsoft.DBforMySQL/flexibleServers"
+  source                    = "./modules/subnet_delegation"
+  rg_name                   = module.rg.rg_name
+  vnet_name                 = module.vnet.vnet_name
+  delegated_subnet_name     = "subnet_backend"
+  delegated_subnet_cidr     = ["10.0.2.0/28"]
+  delegation_name           = "mysqlDelegation"
+  service_delegation        = "Microsoft.DBforMySQL/flexibleServers"
   service_delegation_action = ["Microsoft.Network/virtualNetworks/subnets/action"]
 
-  depends_on            = [module.rg, module.vnet]
+  depends_on = [module.rg, module.vnet]
 }
 
 # module "azure_mysql_server" {
@@ -114,8 +114,8 @@ module "azure_app_sevice" {
   location         = var.location
   service_plan_id  = module.azure_app_sevice_plan.app_service_plan_id
   php_version      = "8.2"
-  vnet_name = module.vnet.vnet_name
-  subnet_id =  module.subnet_frontend.subnet_id
+  vnet_name        = module.vnet.vnet_name
+  subnet_id        = module.subnet_frontend.subnet_id
   tags             = local.common_tags
 
   depends_on = [module.azure_app_sevice_plan]
@@ -123,7 +123,7 @@ module "azure_app_sevice" {
 
 module "azure_app_slot" {
   source         = "./modules/app_service_slot"
-  for_each         = toset(var.slot_names)
+  for_each       = toset(var.slot_names)
   slot_name      = each.value
   app_service_id = module.azure_app_sevice.app_service_id
 
@@ -131,13 +131,13 @@ module "azure_app_slot" {
 }
 
 module "github_scm" {
-  source = "./modules/scm_app_service"
-  main_branch = "main"
-  repo_url = "https://github.com/guido1990/php_hello_world.git"
-  app_id = module.azure_app_sevice.app_service_id
-  use_manual_integration = false  
-  type = "GitHub"
-  token = "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"
+  source                 = "./modules/scm_app_service"
+  main_branch            = "main"
+  repo_url               = "https://github.com/guido1990/php_hello_world.git"
+  app_id                 = module.azure_app_sevice.app_service_id
+  use_manual_integration = false
+  type                   = "GitHub"
+  token                  = ""
 
   depends_on = [module.rg]
 
