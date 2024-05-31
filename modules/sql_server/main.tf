@@ -8,4 +8,11 @@ resource "azurerm_mysql_flexible_server" "server_azure_mysql" {
   backup_retention_days = var.backup_retention_days
   geo_redundant_backup_enabled = var.geo_redundant_backup_enabled
   delegated_subnet_id = var.delegated_subnet_id
+  private_dns_zone_id = var.private_dns_zone_id
+
+  storage {
+    size_gb = var.db_size 
+  }
+
+  tags = var.tags
 }
