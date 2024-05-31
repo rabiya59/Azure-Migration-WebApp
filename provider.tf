@@ -2,13 +2,13 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=3.99.0"
+      version = "=3.105.0"
     }
   }
 
   backend "azurerm" {
-    resource_group_name  = "fr-bidart-fr2"
-    storage_account_name = "frypsolonfr2"
+    resource_group_name  = "fr2-bidart-fr"
+    storage_account_name = "fr2ypsolonfr"
     container_name       = "archi-ypsolapp"
     key                  = "terraform.tfstate"
   }
