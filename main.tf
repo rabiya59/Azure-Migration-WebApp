@@ -169,23 +169,3 @@ module "azure_app_slot" {
 
   depends_on = [module.azure_app_sevice]
 }
-
-# module "github_scm" {
-#   source                 = "./modules/scm_app_service"
-#   main_branch            = "main"
-#   repo_url               = "https://github.com/guido1990/hello_php.git"
-#   app_id                 = module.azure_app_sevice.app_service_id
-#   use_manual_integration = false
-#   type                   = "GitHub"
-#   token                  = "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"
-
-#   depends_on = [module.rg]
-
-# }
-
-# resource "null_resource" "app_service_link_repo_code" {
-#   provisioner "local-exec" {
-#   command = "az webapp deployment source config --repo-url https://github.com/guido1990/test_php.git --branch prod  --name ${module.azure_app_sevice.app_service_name}  --resource-group ${module.rg.rg_name}"
-#   }
-#   depends_on = [module.azure_app_sevice]
-# }
