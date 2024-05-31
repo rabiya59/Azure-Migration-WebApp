@@ -11,15 +11,30 @@ resource "azurerm_linux_web_app" "web_app" {
   } 
 
   app_settings = {
+    "SERVER" = var.sql_server
+    "DB_NAME" = var.sql_db_name
+    "USER" = var.db_user_name
+    "PASS" = var.db_password
+
     #"SOME_KEY" = "some-value"
   }
+  logs {
+    application_logs {
+      azure_blob_storage {
+        sas_url = var.app_logs_container
+        retention_in_days = var.app_logs_retention
+        level = var.app_error_level
+      }
+      file_system_level = var.app_error_level
+    }
+  }
+
+  
 
   provisioner "local-exec" {
     command = "az webapp vnet-integration add --name ${var.app_service_name} --resource-group ${var.rg_name}  --vnet ${var.vnet_name} --subnet ${var.subnet_id}"
     interpreter = ["PowerShell", "-command" ]
-  }
-
-  
+  }  
 
   # connection_string {
   #   name  = "Database"
