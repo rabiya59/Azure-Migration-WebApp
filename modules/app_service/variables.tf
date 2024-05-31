@@ -29,3 +29,28 @@ variable "vnet_name"{
 variable "subnet_id"{
   type = string
 }
+variable "app_logs_container" {
+  type = string
+}
+variable "app_logs_retention" {
+  type = string
+}
+variable "app_error_level" {
+  type = string
+}
+variable "sql_server"{
+  type = string
+  sensitive = true
+}
+variable "sql_db_name"{
+  type = string
+  sensitive = true
+}
+variable "db_user_name"{
+  type = string
+  sensitive = true
+}
+variable "db_password"{
+  type = string
+  sensitive = true
+}
